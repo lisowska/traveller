@@ -1,0 +1,25 @@
+{
+  "name": "eslint-plugin-import-alias",
+  "version": "1.2.0",
+  "description": "ESLint rule for restricting imports to path aliases",
+  "main": "lib/index.js",
+  "repository": "https://github.com/steelsojka/eslint-import-alias",
+  "directories": {
+    "doc": "docs",
+    "lib": "lib",
+    "test": "test"
+  },
+  "scripts": {
+    "test": "babel-node test",
+    "clean": "rm -rf lib",
+    "build": "babel src --out-dir ./ ",
+    "prebuild": "npm run clean"
+  },
+  "author": "Steven Sojka",
+  "license": "MIT",
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
+    "eslint": "^4.19.1"
+  }
+}
