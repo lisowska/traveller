@@ -17,6 +17,8 @@ import ReactLoading from 'react-loading';
 import { Search2Icon } from '@chakra-ui/icons';
 import { useQuery, gql, useMutation } from '@apollo/client';
 
+import { InfoComponent } from './InfoComponent';
+
 const CITY_QUERY = gql`
   query GetCity {
     cities {
@@ -54,7 +56,6 @@ export const Home: FunctionComponent = () => {
   const citiesData = data && data?.cities?.cities;
 
   const [APIData, setAPIData] = useState([]);
-  const [visited, setVisited] = useState();
 
   useEffect(() => {
     setAPIData(citiesData);
@@ -63,21 +64,26 @@ export const Home: FunctionComponent = () => {
   const [searchInput, setSearchInput] = useState('');
   const [filteredResults, setFilteredResults] = useState([]);
 
+  const [noCity, setNoCity] = useState<Boolean>(false);
+
   const searchItems = (searchValue: any) => {
     if (searchInput !== '') {
-      console.log('aniaa');
       const filteredData = APIData.filter((item) => {
         return Object.values(item)
           .join('')
           .toLowerCase()
           .includes(searchInput.toLowerCase());
       });
+
       setFilteredResults(filteredData);
+
+      if (filteredData && filteredData.length === 0) {
+        setNoCity(true);
+      } else {
+        setNoCity(false);
+      }
     }
 
-    // else {
-    //   setFilteredResults(APIData);
-    // }
     setSearchInput(searchValue);
   };
 
@@ -103,7 +109,7 @@ export const Home: FunctionComponent = () => {
             onClick={() => searchItems(inputValue)}
           />
         </InputGroup>
-        <UnorderedList>
+        <UnorderedList backgroundColor="#002945" height="100%" padding={10}>
           {searchInput && searchInput.length > 1
             ? filteredResults.map((item) => {
                 return (
@@ -115,9 +121,10 @@ export const Home: FunctionComponent = () => {
                       marginRight="5"
                       marginBlockStart="5"
                       textAlign="center"
-                      color="#003357"
                       fontWeight="600"
                       fontSize="30"
+                      color="white"
+                      paddingBottom={5}
                     >
                       {item['name']}
                     </ListItem>
@@ -152,20 +159,28 @@ export const Home: FunctionComponent = () => {
                     </Button>
                     <Button
                       padding="5"
+                      marginRight="5"
+                      marginLeft="5"
                       color="#003357"
                       background="#50e3c1"
                       minWidth="160"
                       cursor="pointer"
-                      onClick={() =>
-                        updateCity({
-                          variables: {
-                            input: {
-                              id: item['id'],
-                              wishlist: true,
+                      onClick={async (e: React.MouseEvent) => {
+                        e.preventDefault();
+                        try {
+                          const result = await updateCity({
+                            variables: {
+                              input: {
+                                id: item['id'],
+                                wishlist: true,
+                              },
                             },
-                          },
-                        })
-                      }
+                          });
+                          return result;
+                        } catch (error) {
+                          throw error;
+                        }
+                      }}
                     >
                       {!item['wishlist']
                         ? 'Add city to wish list'
@@ -176,31 +191,10 @@ export const Home: FunctionComponent = () => {
               })
             : ''}
         </UnorderedList>
-
-        <div className="container">
-          <div className="user-list"></div>
-        </div>
+        {noCity && (
+          <InfoComponent description="Unfortunately, we don't have this city in our base. Try with another" />
+        )}
       </Container>
     </VStack>
   );
 };
-
-{
-  /* <Button
-                      padding="5"
-                      color="#003357"
-                      background="#50e3c1"
-                      minWidth="160"
-                      cursor="pointer"
-                      onClick={() =>
-                        updateCity({
-                          variables: {
-                            input: {
-                              id: item['id'],
-                              wishlist: true,
-                            },
-                          },
-                        })
-                      }
-                    ></Button> */
-}

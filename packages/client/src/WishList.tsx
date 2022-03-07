@@ -1,5 +1,4 @@
 import React, { useEffect, useState, FunctionComponent } from 'react';
-import type { FC } from 'react';
 import {
   Heading,
   ListItem,
@@ -37,7 +36,6 @@ export const WishList: FunctionComponent = () => {
   // if (!data) {
   //   return null;
   // }
-  // if (loading && !data) return <p>Loading...</p>;
 
   const citiesData = data && data?.cities?.cities;
 
@@ -56,20 +54,29 @@ export const WishList: FunctionComponent = () => {
       display="flex"
       _before={{
         content: '""',
-        backgroundImage: 'imageCities.jpg',
+        backgroundImage: 'worldMap2.jpeg',
         backgroundSize: 'cover',
         position: 'absolute',
         top: '0px',
         right: '0px',
         bottom: '0px',
         left: '0px',
-        opacity: 0.6,
+        opacity: 0.8,
       }}
     >
       <Heading as="h1" position="relative" marginBottom={10}>
         WISH LIST
       </Heading>
-      <UnorderedList position="relative">
+      <UnorderedList
+        position="relative"
+        paddingTop={5}
+        backgroundColor="#002945"
+        width={400}
+        display="flex"
+        flexDirection="column"
+        alignItems="center"
+        borderRadius={4}
+      >
         {visit &&
           visit.length > 1 &&
           visit
@@ -77,44 +84,43 @@ export const WishList: FunctionComponent = () => {
             .map((item) => {
               return (
                 <>
-                  <Box
-                    display="grid"
-                    gridGap={2}
-                    grid-template-columns="repeat(auto-fit, minmax(15.625rem, 1fr))"
-                    margin-top={10}
+                  <ListItem
+                    key={item['id']}
+                    listStyleType="none"
+                    marginBlockStart="5"
+                    marginBottom="10"
+                    textAlign="center"
+                    color="#003357"
+                    fontWeight="600"
+                    fontSize="30"
+                    width={300}
+                    minHeight={120}
+                    borderRadius={12}
+                    backgroundColor="blue"
+                    top={50}
+                    boxShadow="0 1px 3px 0 rgba(0, 0, 0, 0.1),0 1px 2px 0 rgba(0, 0, 0, 0.06)"
+                    display="flex"
+                    flexDirection="row"
+                    background="white"
+                    padding={15}
                   >
-                    <ListItem
-                      key={item['id']}
-                      listStyleType="none"
-                      marginRight="5"
-                      marginBlockStart="5"
-                      textAlign="center"
-                      color="#003357"
-                      fontWeight="600"
-                      fontSize="30"
-                      width={300}
-                      borderRadius={12}
-                      backgroundColor="blue"
-                      top={50}
-                      boxShadow="0 1px 3px 0 rgba(0, 0, 0, 0.1),0 1px 2px 0 rgba(0, 0, 0, 0.06)"
-                      display="flex"
-                      flexDirection="row"
-                      background="white"
-                      padding={15}
-                    >
-                      <Box as="p" width={200} paddingRight={5}>
-                        {item['name']}{' '}
-                      </Box>
-                      <Box as="p" width={200}>
-                        {item['country']}
-                      </Box>
-                    </ListItem>
-                  </Box>
+                    <Box as="p" width={200} paddingRight={5}>
+                      {item['name']}{' '}
+                    </Box>
+                    <Box as="p" width={200}>
+                      {item['country']}
+                    </Box>
+                  </ListItem>
                 </>
               );
             })}
 
-        {wishLista === undefined && <InfoComponent visited={false} />}
+        {wishLista === undefined && (
+          <InfoComponent
+            ctaBtn={true}
+            description="You don't have any cities on wishlist yet"
+          />
+        )}
       </UnorderedList>
     </VStack>
   );
