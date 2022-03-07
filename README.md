@@ -9,8 +9,8 @@ yarn start:all
 
 ## Info
 
-User can for cities using the provided input
-User can set city to visited/wishlist
+- User can find cities using the provided input
+- User can set city to visited/wishlist
 
 ### API
 
