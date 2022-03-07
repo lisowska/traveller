@@ -10,6 +10,7 @@ import {
   ListItem,
   UnorderedList,
   Button,
+  useToast,
 } from '@chakra-ui/react';
 
 import ReactLoading from 'react-loading';
@@ -65,6 +66,8 @@ export const Home: FunctionComponent = () => {
   const [filteredResults, setFilteredResults] = useState([]);
 
   const [noCity, setNoCity] = useState<Boolean>(false);
+
+  const toast = useToast();
 
   const searchItems = (searchValue: any) => {
     if (searchInput !== '') {
@@ -139,7 +142,7 @@ export const Home: FunctionComponent = () => {
                       onClick={async (e: React.MouseEvent) => {
                         e.preventDefault();
                         try {
-                          const result = await updateCity({
+                          await updateCity({
                             variables: {
                               input: {
                                 id: item['id'],
@@ -147,7 +150,15 @@ export const Home: FunctionComponent = () => {
                               },
                             },
                           });
-                          return result;
+                          const successToast = () =>
+                            toast({
+                              title: 'City added.',
+                              description: `We've added ${item['name']} to your visit list.`,
+                              status: 'success',
+                              duration: 9000,
+                              isClosable: true,
+                            });
+                          return successToast();
                         } catch (error) {
                           throw error;
                         }
@@ -168,7 +179,7 @@ export const Home: FunctionComponent = () => {
                       onClick={async (e: React.MouseEvent) => {
                         e.preventDefault();
                         try {
-                          const result = await updateCity({
+                          await updateCity({
                             variables: {
                               input: {
                                 id: item['id'],
@@ -176,7 +187,16 @@ export const Home: FunctionComponent = () => {
                               },
                             },
                           });
-                          return result;
+
+                          const successToast = () =>
+                            toast({
+                              title: 'City added.',
+                              description: `We've added ${item['name']} to your wish list.`,
+                              status: 'success',
+                              duration: 9000,
+                              isClosable: true,
+                            });
+                          return successToast();
                         } catch (error) {
                           throw error;
                         }
