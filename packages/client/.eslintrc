@@ -10,5 +10,10 @@
     "babel": true,
     "compat": true
   },
-  "ignorePatterns": ["/dist"]
+  "ignorePatterns": ["/dist"],
+  "rules": {
+    "semi": ["error", "never"],
+    "@typescript-eslint/semi": "off",
+    "no-unexpected-multiline": "error"
+  }
 }
