@@ -12,7 +12,7 @@ const doc = {
   info: {
     version: '0.1.0',
     title: 'Traveller API',
-    description: 'Smartpension Traveller Rest API',
+    description: 'Traveller Rest API',
   },
   host: 'localhost:4000',
   definitions: {

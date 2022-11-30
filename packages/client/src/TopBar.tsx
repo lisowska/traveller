@@ -23,9 +23,9 @@ export const TopBar: FC = () => {
       marginBottom="3rem"
       padding="0.5rem"
     >
-      <Link to="/">
+      {/* <Link to="/">
         <Image src={image} alt="smart logo" maxHeight="7" />
-      </Link>
+      </Link> */}
 
       <HStack justifyContent="right" width="100%">
         <ChakraLink as={Link} to="/">
