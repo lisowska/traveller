@@ -45,15 +45,12 @@ const UPDATE_CITY = gql`
 `;
 
 export const Home: FunctionComponent = () => {
-  const { loading, data } = useQuery(CITY_QUERY, {
+  const { data } = useQuery(CITY_QUERY, {
     errorPolicy: 'all',
   });
 
   const [updateCity] = useMutation(UPDATE_CITY);
 
-  // if (loading) {
-  //   return <ReactLoading height={667} width={375} />;
-  // }
   const citiesData = data && data?.cities?.cities;
 
   const [APIData, setAPIData] = useState([]);
@@ -63,6 +60,7 @@ export const Home: FunctionComponent = () => {
   });
 
   const [searchInput, setSearchInput] = useState('');
+
   const [filteredResults, setFilteredResults] = useState([]);
 
   const [noCity, setNoCity] = useState<Boolean>(false);
@@ -70,13 +68,15 @@ export const Home: FunctionComponent = () => {
   const toast = useToast();
 
   const searchItems = (searchValue: any) => {
-    if (searchInput !== '') {
-      const filteredData = APIData.filter((item) => {
-        return Object.values(item)
-          .join('')
-          .toLowerCase()
-          .includes(searchInput.toLowerCase());
-      });
+    if (searchValue !== '') {
+      const filteredData =
+        APIData &&
+        APIData.filter((item) => {
+          return Object.values(item)
+            .join('')
+            .toLowerCase()
+            .includes(searchValue.toLowerCase());
+        });
 
       setFilteredResults(filteredData);
 
@@ -93,8 +93,8 @@ export const Home: FunctionComponent = () => {
   const [inputValue, setInputValue] = useState<string>('');
 
   useEffect(() => {
-    searchItems(inputValue);
-  }, []);
+    setSearchInput(inputValue);
+  }, [searchInput]);
 
   return (
     <VStack spacing="8">
@@ -105,17 +105,33 @@ export const Home: FunctionComponent = () => {
             placeholder="Search city"
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
+            type="text"
+            id="cityInput"
+            name="cityInput"
+            data-testid="cityInput"
           />
 
           <InputRightElement
-            children={<IconButton aria-label="" icon={<Search2Icon />} />}
+            children={
+              <IconButton
+                aria-label="inputButton"
+                icon={<Search2Icon />}
+                data-testid="inputButton"
+                name="inputButton"
+              />
+            }
             onClick={() => searchItems(inputValue)}
           />
         </InputGroup>
-        <UnorderedList backgroundColor="#002945" height="100%" padding={10}>
-          {searchInput && searchInput.length > 1
-            ? filteredResults.map((item) => {
-                return (
+        {searchInput.length > 1
+          ? filteredResults &&
+            filteredResults.map((item) => {
+              return (
+                <UnorderedList
+                  backgroundColor="#002945"
+                  height="100%"
+                  padding={10}
+                >
                   <>
                     <ListItem
                       key={item['id']}
@@ -153,7 +169,7 @@ export const Home: FunctionComponent = () => {
                           const successToast = () =>
                             toast({
                               title: 'City added.',
-                              description: `We've added ${item['name']} to your visit list.`,
+                              description: `We have added ${item['name']} to your visit list.`,
                               status: 'success',
                               duration: 9000,
                               isClosable: true,
@@ -207,10 +223,11 @@ export const Home: FunctionComponent = () => {
                         : 'Added to wishList'}
                     </Button>
                   </>
-                );
-              })
-            : ''}
-        </UnorderedList>
+                </UnorderedList>
+              );
+            })
+          : ''}
+
         {noCity && (
           <InfoComponent description="Unfortunately, we don't have this city in our base. Try with another" />
         )}

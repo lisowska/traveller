@@ -26,16 +26,9 @@ const WISHLIST_CITIES_QUERY = gql`
 
 export const WishList: FunctionComponent = () => {
   const [visit, SetVisit] = useState([]);
-  const { loading, data } = useQuery(WISHLIST_CITIES_QUERY, {
+  const { data } = useQuery(WISHLIST_CITIES_QUERY, {
     errorPolicy: 'all',
   });
-  // if (loading) {
-  //   return <ReactLoading height={667} width={375} color={'#50e3c1'} />;
-  // }
-
-  // if (!data) {
-  //   return null;
-  // }
 
   const citiesData = data && data?.cities?.cities;
 
